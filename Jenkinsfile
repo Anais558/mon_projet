@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clonage') {
             steps {
-                git credentialsId: 'github-token', url: 'https://github.com/Anais558/mon_projet.git'
+                git credentialsId: 'github-token', branch: 'main', url: 'https://github.com/Anais558/mon_projet.git'
             }
         }
         stage('Setup') {
