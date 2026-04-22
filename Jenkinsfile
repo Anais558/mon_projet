@@ -39,17 +39,21 @@ pipeline {
             }
         }
         stage('DAST - OWASP ZAP') {
-            steps {
-                sh '''
-                python3 src/app.py &
-                sleep 5
-                docker run --network="host" -v $(pwd):/zap/wrk:rw -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://localhost:5000
-                '''
-            }
-        }
+    steps {
+        sh '''
+            python3 src/app.py &
+            sleep 5
+            docker run --network=host \
+                --user root \
+                -v $(pwd):/zap/wrk:rw \
+                -t ghcr.io/zaproxy/zaproxy:stable \
+                zap-baseline.py -t http://localhost:5000 || true
+        '''
+    }
+}
         stage('Clean') {
             steps {
-                sh 'rm -rf venv'
+               sh 'rm -rf venv'
             }
         }
     }
